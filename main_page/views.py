@@ -5,5 +5,5 @@ from django.shortcuts import render
 def Prod(request):
     return render(
         request,
-        'main_page/base.html'
+        'main_page/login.html'
     )
