@@ -5,17 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COSMECCA</title>
     
-    <!-- main_style.css -->
-    <link rel="stylesheet" href="{% static 'css/test.css' %}">
-
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- chart.js -->
-    <!-- <link rel="stylesheet" href="css/main.css"> -->
-	<script defer src="{% static 'js/main.js' %}"></script>  
-    <script defer src="{% static 'js/plugins/crypto-js.min.js' %}"></script>
-    <script defer src="{% static 'js/utils/crypto.js' %}"></script>
-    <script defer src="{% static 'js/utils/utils.js' %}"></script>
-    <script src="js/network/api.js"></script>
-    <script src="{% static 'js/network/on-ajax.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- daterangepicker -->
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!-- chart.js -->
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <script src="{% static '/js/plugins/jquery.tablesorter.min.js' %}"></script>
+	<script defer src="{% static '/js/main.js' %}"></script>
 </head>

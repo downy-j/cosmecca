@@ -1,5 +1,368 @@
 {% extends 'main_page/base.html' %}
 
+{% load static %}
+
 {% block content %}
-    <h1> 트랜드 분석 페이지 </h1>
+
+<script src="{% static '/js/nav_header.js' %}"></script>
+<script src="{% static '/js/network/api.js' %}"></script>
+<script src="{% static '/js/network/on-ajax.js' %}"></script>
+<script src="{% static '/js/utils/utils.js' %}"></script>
+<script src="{% static '/js/plugins/pager.js' %}"></script>
+<script src="{% static '/js/plugins/dateFormat.js' %}"></script>
+<script src="{% static '/js/plugins/storage.js' %}"></script>
+<script src="{% static '/js/plugins/chart.js' %}"></script>
+<script src="{% static '/js/plugins/csv.js' %}"></script>
+<script src="{% static '/js/constants/meta-info.js' %}"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+<main class="site-content trend">
+    <div class="container">
+        <div class="wrap p-16 shadow">
+            <h2 class="tt"><span></span>트렌드 분석</h2>
+            <ul class="tabs">
+                <li class="tab-link current" data-tab="tab-1">네이버 데이터랩</li><li class="tab-link" data-tab="tab-2">블로그 리뷰</li><li class="tab-link" data-tab="tab-3">유튜브 리뷰</li><li class="tab-link" data-tab="tab-4">인스타 리뷰</li>
+            </ul>
+            <div id="tab-1" class="tab-content current">
+                <div class="filter_area relative">
+                        <div class="f_a_c button_info">
+                            <p class="info m-r-12">*인기 검색어 및 상품명 클릭시 연관검색어 기능이 활성화됩니다.</p>
+                            <button class="relatedBtn p-b ">연관 검색어</button>
+                        </div>
+                    <div class="flex">
+                        <div class="group f_a_c class">
+                            <p class="tt">분류</p>
+                            <select id="category_1" class="m-r-12" onchange="changeCategory_1()">
+                                <option value="All">화장품 카테고리 중분류</option>
+                            </select>
+                            <select id="category_2">
+                                <option value="All">소분류</option>
+                            </select>
+                        </div>
+
+                        <div class="group f_a_c m-l-20 class_age">
+                            <p class="tt">연령/성별</p>
+                            <select id="age" class="m-r-12">
+                                <option value="A">전체 연령</option>
+                                <option value="10">10대</option>
+                                <option value="20">20대</option>
+                                <option value="30">30대</option>
+                                <option value="40">40대</option>
+                                <option value="50">50대</option>
+                                <option value="60">60대 이상</option>
+                            </select>
+                            <select id="gender">
+                                <option value="A">전체 성별</option>
+                                <option value="M">남성</option>
+                                <option value="F">여성</option>
+                            </select>
+                        </div>
+                    </div> <!-- //분류, 연령/성별 -->
+
+                    <div class="flex m-t-16">
+                        <div class="group f_a_c set_date">
+                            <p class="tt info_pop"><span></span> 기간설정</p>
+                            <div class="popup">
+                                <p>*최대 1년까지 설정 가능합니다.<br/> 1년 이내의 기간으로 설정해주세요.</p>
+                                <p>*인기검색어는 2021년부터 검색 가능합니다.</p>
+                            </div>
+                            <p class="month m-r-12">월간</p>
+                            <div class="period m-r-12">
+                                <ul class="flex">
+                                    <li class="active">전체</li>
+                                    <li>1개월</li>
+                                    <li>3개월</li>
+                                    <li>1년</li>
+                                </ul>
+                            </div>
+                            <div class="month_select f_b_c">
+                                <div class="from">
+                                    <select class="m-r-12 year" id="year" onchange="changePeriodYear(this)">
+                                        <option value="년도">년도</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                    </select>
+                                    <select class="month" id="month">
+                                        <option value="월">월</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                </div>
+                                <span>~</span>
+                                <div class="to">
+                                    <select class="m-r-12 year" id="year" onchange="changePeriodYear(this)">
+                                        <option value="년도">년도</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                    </select>
+                                    <select class="month" id="month">
+                                        <option value="월">월</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- //기간 설정 -->
+                    <button class="inquiry m-t-16" onclick="getNaverData()"><span></span>조회하기</button>
+                </div>  <!-- //검색 및 필터 영역 -->
+               <div class="search_results">
+                    <div class="flex m-t-20">
+                        <div class="top20List half">
+                            <div class="title_info f_b_c">
+                                <div class="f_b_c">
+                                    <p class="tt_common m-r-12"><strong>대분류(화장품/미용)</strong> 월간 인기검색어 TOP20 리스트</p>
+                                    <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                                </div>
+                                <button onclick="exportData('Main')"><img src="{% static '/image/download-con_s.svg' %}" alt="다운로드 버튼"></button>
+                            </div>
+                            <div class="search_word_wrap wrap m-t-12">
+                                <div class="view_date top_20">
+                                    <span class="prev_month" onclick="clickTop20Prev()">이전 버튼</span>
+                                    <p></p>
+                                    <span class="next_month" onclick="clickTop20Next()">다음 버튼</span>
+                                </div>
+                                <div class="search_word top_20 p-16">
+                                    <div class="f_b_c">
+                                        <ul>                                           
+                                        </ul>
+                                        <ul>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="top20List half m-l-18">
+                            <div class="title_info f_b_c">
+                                <div class="f_b_c">
+                                    <p class="tt_common m-r-12"><strong id="m_category_selected">중분류</strong> 월간 인기검색어 TOP20 리스트</p>
+                                    <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                                </div>
+                                <button onclick="exportData('Middle')"><img src="{% static '/image/download-con_s.svg' %}" alt="다운로드 버튼"></button>
+                            </div>
+                            <div class="search_word_wrap wrap m-t-12">
+                                <div class="view_date m_top_20">
+                                    <span class="prev_month" onclick="clickMidTop20Prev()">이전 버튼</span>
+                                    <p></p>
+                                    <span class="next_month" onclick="clickMidTop20Next()">다음 버튼</span>
+                                </div>
+                                <div class="search_word m_top_20 p-16">
+                                    <div class="f_b_c">
+                                        <ul>
+                                        </ul>
+                                        <ul>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- //월간 인기검색어 -->
+
+                    <div class="new_regis m-t-20">
+                        <div class="title_info f_b_c">
+                            <div class="f_b_c">
+                                <p class="tt_common m-r-12"><strong id="m_category_selected">중분류/소분류</strong> 신규등록제품 TOP20 리스트</p>
+                                <p class="date_range info" id="new_prod_date_range">2022.01.23 ~ 2022.02.23</p>
+                            </div>
+                            <button class="down p-b" onclick="exportData('New')">조회결과 다운로드</button>
+                        </div>
+                        <div class="new_list m-t-12">
+                            <div class="view_date_wrap">
+                                <div class="view_date new_top_20">
+                                    <span class="prev_month" onclick="clickNewTop20Prev()">이전 버튼</span>
+                                    <p></p>
+                                    <span class="next_month" onclick="clickNewTop20Next()">다음 버튼</span>
+                                </div>
+                            </div>
+                            <div class="list01">
+                                <table class="new_top20">
+                                    <thead>
+                                        <tr>
+                                            <th>NO</th><th>상품명</th><th>브랜드</th><th>상품순위</th><th>리뷰수</th><th>등록수</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>01</td>
+                                            <td class="left" title="-">-</td>
+                                            <td title="-">-</td>
+                                            <td title="-">-</td>
+                                            <td title="-">-</td>
+                                            <td title="-">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>02</td>
+                                            <td class="left" title="-">-</td>
+                                            <td title="-">-</td>
+                                            <td title="-">-</td>
+                                            <td title="-">-</td>
+                                            <td title="-">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> <!-- //중분류/소분류 신규등록제품 TOP20 리스트​ -->
+
+                    <div class="click_chart m-t-20">
+                        <div class="title_info f_b_c">
+                            <div class="f_b_c">
+                                <p class="tt_common m-r-12"><strong id="m_category_selected">선택한 중/소분류</strong> 클릭량 추이 그래프</p>
+                                <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                            </div>
+                            <button class="down p-b" onclick="exportData('Click')">조회결과 다운로드</button>
+                        </div>
+                        <div class="chart_area07 p-g wrap m-t-12">
+                            <canvas id="clicks-line"></canvas>
+                        </div>
+                    </div> <!-- //중분류/소분류 클릭량 추이 그래프 -->
+                </div>
+                <div class="modal_bg related_s_w etc">
+                    <div class="modal_style">
+                        <h3 class="tt"><span></span>연관검색어</h3>
+                        <div class="wrap p-16 m-t-20 bg-g">
+                            <div class="f_a_c">
+                                <p class="tt">검색어</p>
+                                <div class="search_input">
+                                    <form method="GET">
+                                        <input type="text" name="relkeyword" placeholder="검색어 입력"><input type="submit" value="검색" onclick="fetchNaverKeyword()">
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="list01 h_fix m-t-b-12">
+                            <table class="related_s_w_t">
+                                <thead>
+                                    <tr>
+                                        <th>NO</th><th>연관검색어</th><th>PC검색수</th><th>모바일 검색수</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relkeyword_tbody">
+                                </tbody>
+                            </table>
+                        </div>                        
+                        <span class="m_close">close</span>
+                    </div>
+
+                </div>  <!-- 연관검색어 모달 -->
+            </div>
+            <div id="tab-2" class="tab-content">
+                <div class="filter_area">
+                    <div class="row">
+                        <div class="group search f_a_c">
+                            <p class="tt">검색어</p>
+                            <div class="search_input">
+                                    <input type="text" class="long" name="keyword_blog" placeholder="검색어">
+                            </div>
+                        </div>
+                        <button class="inquiry m-t-16" onclick="fetchNaverBlog()"><span></span>조회하기</button>
+                    </div>
+                </div> <!-- //검색 및 필터 영역 -->
+
+                <div class="excel_file m-t-20 f_end">
+                    <select class="w-160" name="limit_blog" onchange="fetchNaverBlog()">
+                        <option value="10">10개씩 보기</option>
+                        <option value="20">20개씩 보기</option>
+                        <option value="30">30개씩 보기</option>
+                    </select>
+                </div> <!-- //엑셀 내려받기 -->
+                <div class="list01 m-t-12">
+                    <table class="blog_table">
+                        <thead>
+                            <tr>
+                                <th>NO</th><th>제목</th><th>내용</th><th>작성자</th><th>작성일</th><th>링크</th>
+                            </tr>
+                        </thead>
+                        <tbody id="naver_blog_list">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="center p-10 pager m-t-16">
+                    <div class="f_c_c" id="naver_blog_pager">                     
+                    </div>
+                </div>
+            </div>
+            <div id="tab-3" class="tab-content">
+                <div class="filter_area">
+                    <div class="row">
+                        <div class="group search f_a_c">
+                            <p class="tt">검색어</p>
+                            <div class="search_input">
+                                    <input type="text" class="long" name="keyword_youtube" placeholder="검색어">
+                            </div>
+                        </div>
+                        <button class="inquiry m-t-16" onclick="fetchYoutubeSearch()"><span></span>조회하기</button>
+                    </div>
+                </div> <!-- //검색 및 필터 영역 -->
+                <div class="youtube_wrap flex m-t-20">                  
+                </div>  <!-- //유튜브 리뷰 -->
+                <div class="center p-10 pager">
+                    <div class="pager youtube f_c_c">                       
+                    </div>
+                </div>
+            </div>
+            <div id="tab-4" class="tab-content">
+                <div class="filter_area">
+                    <div class="row">
+                        <div class="group search f_a_c">
+                            <p class="tt">검색어</p>
+                            <div class="search_input">
+                                    <input type="text" class="long" name="keyword_instargram" placeholder="검색어">
+                            </div>
+                        </div>
+                        <button class="inquiry m-t-16" onclick="fetchInstagramSearch()"><span></span>조회하기</button>
+                    </div>
+                </div> <!-- //검색 및 필터 영역 -->
+                <div class="thumbnail_wrap flex m-t-20" id="instagram_list">                   
+                </div>  <!-- //유튜브 리뷰 -->
+                <div class="center p-10 pager" style="display: none;">
+                    <div class="f_c_c">
+                        <span class="p_pre">prev</span>
+                        <span class="pre">prev</span>
+                        <a href="#" class="current">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">6</a>
+                        <span class="next">next</span>
+                        <span class="n_next">next</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+
+<script src="{% static '/js/trend.js' %}"></script>
+
 {% endblock %}

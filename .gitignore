@@ -129,4 +129,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# cosmecca DB는 버전업할 필요 없음 qwer1234!
 migrations/

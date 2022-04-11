@@ -1,5 +1,1620 @@
 {% extends 'main_page/base.html' %}
 
 {% block content %}
-    <h1> 마켓 페이지 </h1>
+
+{% load static %}
+<script src="{% static '/js/nav_header.js' %}"></script>
+<script src="{% static '/js/network/api.js' %}"></script>
+<script src="{% static '/js/network/on-ajax.js' %}"></script>
+<script src="{% static '/js/utils/utils.js' %}"></script>
+<script src="{% static '/js/plugins/pager.js' %}"></script>
+<script src="{% static '/js/plugins/dateFormat.js' %}"></script>
+<script src="{% static '/js/plugins/storage.js' %}"></script>
+<script src="{% static '/js/plugins/chart.js' %}"></script>
+<script src="{% static '/js/plugins/csv.js' %}"></script>
+<script src="{% static '/js/constants/meta-info.js' %}"></script>
+
+<main class="site-content market">
+    <div class="container">
+        <div class="wrap p-16 shadow">
+            <div class="contents_top">
+                <h2 class="tt"><span></span>시장현황</h2>
+            </div>
+            <div class="wrap p-16 bg-g">
+                <div class="filter_area f_a_c">
+                    <div class="group f_a_c">
+                        <p class="tt">기간설정</p>
+                        <div class="select p_sele">
+                            <select id="period" onchange="checkYear(this.value)">
+                                <option value="month" selected>월별</option>
+                                <option value="quarter">분기별</option>
+                                <option value="year">연별</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="che_wrap period_all f_a_c m-r-12">
+                        <input type="checkbox" id="periodAllChe" onclick="checkPeriodAll(this)">
+                        <label for="periodAllChe"></label>
+                        <p>기간 전체</p>
+                    </div>
+                    <div class="group">
+                        <div class="month_select f_a_c">
+                            <div class="from">
+                                <select class="m-r-12 year start">
+                                    <option value="All">년도</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                </select><select class="month start">
+                                    <option value="All">월</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                            <span>~</span>
+                            <div class="to">
+                                <select class="m-r-12 year end">
+                                    <option value="All">년도</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                </select><select class="month end">
+                                    <option value="All">월</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group f_a_c m-l-20">
+                        <p class="tt">제조사</p>
+                        <div class="select">
+                            <select class="w-240"  multiple="multiple" placeholder="제조사 선택" id="m_select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="group f_a_c m-l-20">
+                        <p class="tt">고객사</p>
+                        <div class="select">
+                            <select class="w-240" multiple="multiple" placeholder="고객사 선택" id="c_select">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="medium_categories m-t-16">
+                        <div class="all_check">
+                            <input type="checkbox" id="m_all_check" onclick="clickMCategoryAllcheck(this)">
+                            <label for="m_all_check"></label>
+                        </div>
+                        <div class="slidetoggle p-16">
+                            <div class="f_b_c">
+                                <h3 class="tt">화장품/미용 전체</h3>
+                                <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                            </div>
+                        </div>
+                        <div class="category_item p-16">
+                            <div class="flex card_wrap">
+                                <div class="card skin">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check01">
+                                        <label for="tt_all_check01"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_skin">스킨케어</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="skin_all">
+                                            <label for="skin_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category skin">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="skin01">
+                                                <label for="skin01"></label>
+                                                <p>스킨/토너/미스트</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="skin02">
+                                                <label for="skin02"></label>
+                                                <p>로션/에멀젼</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="skin03">
+                                                <label for="skin03"></label>
+                                                <p>에센스/세럼</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="skin04">
+                                                <label for="skin04"></label>
+                                                <p>크림/밤</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="skin05">
+                                                <label for="skin05"></label>
+                                                <p>아이크림</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="skin06">
+                                                <label for="skin06"></label>
+                                                <p>페이스오일</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //스킨케어 -->
+                                <div class="card cleansing">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check02">
+                                        <label for="tt_all_check02"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_cleansing">클렌징</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="cleansing_all">
+                                            <label for="cleansing_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category cleansing">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="cleansing01">
+                                                <label for="cleansing01"></label>
+                                                <p>클렌져/페이셜</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="cleansing02">
+                                                <label for="cleansing02"></label>
+                                                <p>클렌져/메이크업</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="cleansing03">
+                                                <label for="cleansing03"></label>
+                                                <p>클렌져/각질케어/패드</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //클렌징​ -->
+                                <div class="card maskpack">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check03">
+                                        <label for="tt_all_check03"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_mask">마스크/팩</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="maskpack_all">
+                                            <label for="maskpack_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category maskpack">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="maskpack01">
+                                                <label for="maskpack01"></label>
+                                                <p>마스크시트/패드</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="maskpack02">
+                                                <label for="maskpack02"></label>
+                                                <p>팩류</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //마스크/팩​ -->
+                                <div class="card suncare">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check04">
+                                        <label for="tt_all_check04"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_suncare">선케어</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="suncare_all">
+                                            <label for="suncare_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category suncare">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="suncare01">
+                                                <label for="suncare01"></label>
+                                                <p>선크림</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="suncare02">
+                                                <label for="suncare02"></label>
+                                                <p>선쿠션</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="suncare03">
+                                                <label for="suncare03"></label>
+                                                <p>선스틱/선밤</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="suncare04">
+                                                <label for="suncare04"></label>
+                                                <p>선에센스/세럼/젤</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="suncare05">
+                                                <label for="suncare05"></label>
+                                                <p>선스프레이</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex card_wrap">
+                                <div class="card hair">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check05">
+                                        <label for="tt_all_check05"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_hair">헤어케어</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="hair_all">
+                                            <label for="hair_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category hair">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="hair01">
+                                                <label for="hair01"></label>
+                                                <p>샴푸</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="hair02">
+                                                <label for="hair02"></label>
+                                                <p>린스/컨디셔너</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="hair03">
+                                                <label for="hair03"></label>
+                                                <p>트리트먼트/팩</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="hair04">
+                                                <label for="hair04"></label>
+                                                <p>에센스/토닉</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="hair05">
+                                                <label for="hair05"></label>
+                                                <p>헤어스타일링</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="hair06">
+                                                <label for="hair06"></label>
+                                                <p>헤어메이크업</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //헤어케어​​​ -->
+                                <div class="card body">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check06">
+                                        <label for="tt_all_check06"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_body">바디케어</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="body_all">
+                                            <label for="body_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category body">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="body01">
+                                                <label for="body01"></label>
+                                                <p>바디로션크림</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="body02">
+                                                <label for="body02"></label>
+                                                <p>핸드/풋크림</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="body03">
+                                                <label for="body03"></label>
+                                                <p>향수/샤워코롱</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="body04">
+                                                <label for="body04"></label>
+                                                <p>클렌져</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //바디케어​​ -->
+                                <div class="card man">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check07">
+                                        <label for="tt_all_check07"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_man">남성류</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="man_all">
+                                            <label for="man_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category man">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="man01">
+                                                <label for="man01"></label>
+                                                <p>스킨케어</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="man02">
+                                                <label for="man02"></label>
+                                                <p>메이크업</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="man03">
+                                                <label for="man03"></label>
+                                                <p>선케어</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="man04">
+                                                <label for="man04"></label>
+                                                <p>클렌징</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="man05">
+                                                <label for="man05"></label>
+                                                <p>헤어</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="man06">
+                                                <label for="man06"></label>
+                                                <p>바디</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //남성류​​​ -->
+                            </div>
+                            <div class="flex card_wrap">
+                                <div class="card face">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check08">
+                                        <label for="tt_all_check08"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_face">메이크업(페이스)</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="face_all">
+                                            <label for="face_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category face flex">
+                                            <div class="left">
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face01">
+                                                    <label for="face01"></label>
+                                                    <p>베이스/프라이머</p>
+                                                </div>
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face02">
+                                                    <label for="face02"></label>
+                                                    <p>파운데이션/쿠션류</p>
+                                                </div>
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face03">
+                                                    <label for="face03"></label>
+                                                    <p>BB크림(CC포함)</p>
+                                                </div>
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face04">
+                                                    <label for="face04"></label>
+                                                    <p>하이라이터/쉐딩</p>
+                                                </div>
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face05">
+                                                    <label for="face05"></label>
+                                                    <p>스킨커버(밤/스틱)</p>
+                                                </div>
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face06">
+                                                    <label for="face06"></label>
+                                                    <p>메이크업픽서</p>
+                                                </div>
+                                            </div>
+                                            <div class="right">
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face07">
+                                                    <label for="face07"></label>
+                                                    <p>블러셔</p>
+                                                </div>
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face08">
+                                                    <label for="face08"></label>
+                                                    <p>컨실러</p>
+                                                </div>
+                                                <div class="che_wrap f_a_c">
+                                                    <input type="checkbox" id="face09">
+                                                    <label for="face09"></label>
+                                                    <p>파우더</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //메이크업(페이스)​ -->
+                                <div class="card eyes">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check09">
+                                        <label for="tt_all_check09"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_eyes">메이크업(아이)</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="">
+                                            <label for="eyes_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category eyes">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="eyes01">
+                                                <label for="eyes01"></label>
+                                                <p>아이섀도우</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="eyes02">
+                                                <label for="eyes02"></label>
+                                                <p>아이라이너</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="eyes03">
+                                                <label for="eyes03"></label>
+                                                <p>아이브로우</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="eyes04">
+                                                <label for="eyes04"></label>
+                                                <p>마스카라</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="eyes05">
+                                                <label for="eyes05"></label>
+                                                <p>아이프라이머</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //메이크업(아이)​ -->
+                                <div class="card lips">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check10">
+                                        <label for="tt_all_check10"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="category_lips">메이크업(립)</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="lips_all">
+                                            <label for="lips_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category lips">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="lips01">
+                                                <label for="lips01"></label>
+                                                <p>립스틱</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="lips02">
+                                                <label for="lips02"></label>
+                                                <p>립글로스</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="lips03">
+                                                <label for="lips03"></label>
+                                                <p>립틴트/라커</p>
+                                            </div>
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="lips04">
+                                                <label for="lips04"></label>
+                                                <p>립케어/립밤</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //메이크업(립)​ -->
+                            </div>
+                            <div class="flex card_wrap">
+                                <div class="card animals">
+                                    <div class="all_check mc">
+                                        <input type="checkbox" id="tt_all_check11">
+                                        <label for="tt_all_check11"></label>
+                                    </div>
+                                    <div class="slidetoggle">
+                                        <div class="f_b_c">
+                                            <p class="tt" m-category="animals">동물용의약외품</p>
+                                            <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                                        </div>
+                                    </div>
+                                    <div class="category_item" style="display: none;">
+                                        <div class="che_wrap lower f_a_c">
+                                            <input type="checkbox" id="animals_all">
+                                            <label for="animals_all"></label>
+                                            <p>하위분류전체​​</p>
+                                        </div>
+                                        <div class="lower_category animals">
+                                            <div class="che_wrap f_a_c">
+                                                <input type="checkbox" id="animals01">
+                                                <label for="animals01"></label>
+                                                <p>동물용의약외품</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- //동물용의약외품​​ -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="small_categories m-t-16">
+                        <div class="all_check">
+                            <input type="checkbox" id="s_all_check" onclick="clickSubAllcheck(this)">
+                            <label for="s_all_check"></label>
+                        </div>
+                        <div class="slidetoggle sub p-16">
+                            <div class="f_b_c">
+                                <h3 class="tt">세부분류</h3>
+                                <img src="{% static '/image/arrow-down.svg' %}" alt="arrow-down">
+                            </div>
+                        </div>
+                        <div class="category_item" style="display: none;">
+                            <div class="pattern01">
+                                <p>화장품/미용 (중분류) 항목을 선택해 주세요.</p>
+                            </div>
+                            <div class="pattern02">
+                                <div class="common category_skin">
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉함(수분공급)" type="checkbox" id="skin_s_01">
+                                        <label for="skin_s_01"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="영양공급" type="checkbox" id="skin_s_02">
+                                        <label for="skin_s_02"></label>
+                                        <p>영양공급</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부진정" type="checkbox" id="skin_s_03">
+                                        <label for="skin_s_03"></label>
+                                        <p>피부진정</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="유수분밸런스" type="checkbox" id="skin_s_04">
+                                        <label for="skin_s_04"></label>
+                                        <p>유수분밸런스</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="skin_s_05">
+                                        <label for="skin_s_05"></label>
+                                        <p>부드러운 발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="skin_s_06">
+                                        <label for="skin_s_06"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="흡수력" type="checkbox" id="skin_s_07">
+                                        <label for="skin_s_07"></label>
+                                        <p>흡수력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="윤기부여" type="checkbox" id="skin_s_08">
+                                        <label for="skin_s_08"></label>
+                                        <p>윤기부여(광채력)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="안티에이징" type="checkbox" id="skin_s_09">
+                                        <label for="skin_s_09"></label>
+                                        <p>안티에이징</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="화이트닝" type="checkbox" id="skin_s_10">
+                                        <label for="skin_s_10"></label>
+                                        <p>화이트닝</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="주름케어" type="checkbox" id="skin_s_11">
+                                        <label for="skin_s_11"></label>
+                                        <p>주름케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="자외선차단" type="checkbox" id="skin_s_12">
+                                        <label for="skin_s_12"></label>
+                                        <p>자외선차단</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="트러블케어" type="checkbox" id="skin_s_13">
+                                        <label for="skin_s_13"></label>
+                                        <p>트러블케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="모공케어" type="checkbox" id="skin_s_14">
+                                        <label for="skin_s_14"></label>
+                                        <p>모공케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="각질케어" type="checkbox" id="skin_s_15">
+                                        <label for="skin_s_15"></label>
+                                        <p>각질케어</p>
+                                    </div>
+                                </div>
+                                <div class="common category_cleansing">
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉합(수분공급)" type="checkbox" id="cleansing_s_01">
+                                        <label for="cleansing_s_01"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="모공케어" type="checkbox" id="cleansing_s_02">
+                                        <label for="cleansing_s_02"></label>
+                                        <p>모공케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피지케어" type="checkbox" id="cleansing_s_03">
+                                        <label for="cleansing_s_03"></label>
+                                        <p>피지케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="블랙헤드케어" type="checkbox" id="cleansing_s_04">
+                                        <label for="cleansing_s_04"></label>
+                                        <p>블랙헤드케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="트러블케어" type="checkbox" id="cleansing_s_05">
+                                        <label for="cleansing_s_05"></label>
+                                        <p>트러블케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="노폐물 제거" type="checkbox" id="cleansing_s_06">
+                                        <label for="cleansing_s_06"></label>
+                                        <p>노폐물제거</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="각질케어" type="checkbox" id="cleansing_s_07">
+                                        <label for="cleansing_s_07"></label>
+                                        <p>각질케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부탄력" type="checkbox" id="cleansing_s_08">
+                                        <label for="cleansing_s_08"></label>
+                                        <p>피부탄력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="세정력" type="checkbox" id="cleansing_s_09">
+                                        <label for="cleansing_s_09"></label>
+                                        <p>세정력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="cleansing_s_10">
+                                        <label for="cleansing_s_10"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                </div>
+                                <div class="common category_suncare">
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉함(수분공급)" type="checkbox" id="suncare_s_01">
+                                        <label for="suncare_s_01"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="suncare_s_02">
+                                        <label for="suncare_s_02"></label>
+                                        <p>부드러운발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부탄력" type="checkbox" id="suncare_s_03">
+                                        <label for="suncare_s_03"></label>
+                                        <p>피부탄력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="흡수력" type="checkbox" id="suncare_s_04">
+                                        <label for="suncare_s_04"></label>
+                                        <p>흡수력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="윤기부여" type="checkbox" id="suncare_s_05">
+                                        <label for="suncare_s_05"></label>
+                                        <p>윤기부여(광채력)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="안티에이징" type="checkbox" id="suncare_s_06">
+                                        <label for="suncare_s_06"></label>
+                                        <p>안티에이징</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="화이트닝" type="checkbox" id="suncare_s_07">
+                                        <label for="suncare_s_07"></label>
+                                        <p>화이트닝</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="주름케어" type="checkbox" id="suncare_s_08">
+                                        <label for="suncare_s_08"></label>
+                                        <p>주름케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="밀착력" type="checkbox" id="suncare_s_09">
+                                        <label for="suncare_s_09"></label>
+                                        <p>밀착력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="지속력" type="checkbox" id="suncare_s_10">
+                                        <label for="suncare_s_10"></label>
+                                        <p>지속력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="트러블케어" type="checkbox" id="suncare_s_11">
+                                        <label for="suncare_s_11"></label>
+                                        <p>트러블케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="오일 프리" type="checkbox" id="suncare_s_12">
+                                        <label for="suncare_s_12"></label>
+                                        <p>오일프리</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="suncare_s_13">
+                                        <label for="suncare_s_13"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                </div>
+                                <div class="common category_hair">
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉함(수분공급)" type="checkbox" id="hair_s_01">
+                                        <label for="hair_s_01"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="hair_s_02">
+                                        <label for="hair_s_02"></label>
+                                        <p>부드러운발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="윤기부여" type="checkbox" id="hair_s_03">
+                                        <label for="hair_s_03"></label>
+                                        <p>윤기부여(광채력)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="영양공급" type="checkbox" id="hair_s_04">
+                                        <label for="hair_s_04"></label>
+                                        <p>영양공급</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="흡수력" type="checkbox" id="hair_s_05">
+                                        <label for="hair_s_05"></label>
+                                        <p>흡수력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="머리결개선" type="checkbox" id="hair_s_06">
+                                        <label for="hair_s_06"></label>
+                                        <p>머리결개선</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="고정력" type="checkbox" id="hair_s_07">
+                                        <label for="hair_s_07"></label>
+                                        <p>고정력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="볼륨효과" type="checkbox" id="hair_s_08">
+                                        <label for="hair_s_08"></label>
+                                        <p>볼륨효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="손상" type="checkbox" id="hair_s_09">
+                                        <label for="hair_s_09"></label>
+                                        <p>손상모(케어)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="웨이브" type="checkbox" id="hair_s_10">
+                                        <label for="hair_s_10"></label>
+                                        <p>웨이브(케어)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="염색" type="checkbox" id="hair_s_11">
+                                        <label for="hair_s_11"></label>
+                                        <p>염색모발(케어)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="거품" type="checkbox" id="hair_s_12">
+                                        <label for="hair_s_12"></label>
+                                        <p>거품력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="세정력" type="checkbox" id="hair_s_13">
+                                        <label for="hair_s_13"></label>
+                                        <p>세정력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="노폐물제거" type="checkbox" id="hair_s_14">
+                                        <label for="hair_s_14"></label>
+                                        <p>노폐물제거</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="모발영양" type="checkbox" id="hair_s_15">
+                                        <label for="hair_s_15"></label>
+                                        <p>모발탄력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="스칼프케어" type="checkbox" id="hair_s_16">
+                                        <label for="hair_s_16"></label>
+                                        <p>스칼프케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="탈모" type="checkbox" id="hair_s_17">
+                                        <label for="hair_s_17"></label>
+                                        <p>탈모기능성</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="hair_s_18">
+                                        <label for="hair_s_18"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                </div>
+                                <div class="common category_body">
+                                    <div class="check_set">
+                                        <input value="세정력" type="checkbox" id="body_s_01">
+                                        <label for="body_s_01"></label>
+                                        <p>세정력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="풍부한거품" type="checkbox" id="body_s_02">
+                                        <label for="body_s_02"></label>
+                                        <p>풍부한 거품</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="상쾌함" type="checkbox" id="body_s_03">
+                                        <label for="body_s_03"></label>
+                                        <p>상쾌함</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="body_s_04">
+                                        <label for="body_s_04"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="냄새케어" type="checkbox" id="body_s_05">
+                                        <label for="body_s_05"></label>
+                                        <p>냄새케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="body_s_06">
+                                        <label for="body_s_06"></label>
+                                        <p>부드러운발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="흡수력" type="checkbox" id="body_s_07">
+                                        <label for="body_s_07"></label>
+                                        <p>흡수력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="발림성" type="checkbox" id="body_s_08">
+                                        <label for="body_s_08"></label>
+                                        <p>발림성</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉함(수분공급)" type="checkbox" id="body_s_09">
+                                        <label for="body_s_09"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="영양공급" type="checkbox" id="body_s_10">
+                                        <label for="body_s_10"></label>
+                                        <p>영양공급</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="각질케어(피지케어)" type="checkbox" id="body_s_11">
+                                        <label for="body_s_11"></label>
+                                        <p>각질케어(피지케어)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="트러블케어" type="checkbox" id="body_s_12">
+                                        <label for="body_s_12"></label>
+                                        <p>트러블케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부탄력" type="checkbox" id="body_s_13">
+                                        <label for="body_s_13"></label>
+                                        <p>피부탄력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="윤기부여" type="checkbox" id="body_s_14">
+                                        <label for="body_s_14"></label>
+                                        <p>윤기부여</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="향" type="checkbox" id="body_s_15">
+                                        <label for="body_s_15"></label>
+                                        <p>향</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="아로마" type="checkbox" id="body_s_16">
+                                        <label for="body_s_16"></label>
+                                        <p>아로마효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="어린이겸용" type="checkbox" id="body_s_17">
+                                        <label for="body_s_17"></label>
+                                        <p>어린이겸용</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="마사지효과" type="checkbox" id="body_s_18">
+                                        <label for="body_s_18"></label>
+                                        <p>마사지효과</p>
+                                    </div>
+                                </div>
+                                <div class="common category_man">
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="man_s_01">
+                                        <label for="man_s_01"></label>
+                                        <p>부드러운발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="man_s_02">
+                                        <label for="man_s_02"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉함(수분공급)" type="checkbox" id="man_s_03">
+                                        <label for="man_s_03"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="흡수력" type="checkbox" id="man_s_04">
+                                        <label for="man_s_04"></label>
+                                        <p>흡수력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부결정돈" type="checkbox" id="man_s_05">
+                                        <label for="man_s_05"></label>
+                                        <p>피부결정돈</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="트러블케어" type="checkbox" id="man_s_06">
+                                        <label for="man_s_06"></label>
+                                        <p>트러블케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="유수분밸런스조절" type="checkbox" id="man_s_07">
+                                        <label for="man_s_07"></label>
+                                        <p>유수분 밸런스조절</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부진정" type="checkbox" id="man_s_08">
+                                        <label for="man_s_08"></label>
+                                        <p>피부진정</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="모공케어" type="checkbox" id="man_s_09">
+                                        <label for="man_s_09"></label>
+                                        <p>모공케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="각질케어/피지케어" type="checkbox" id="man_s_10">
+                                        <label for="man_s_10"></label>
+                                        <p>각질케어(피지케어)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="화이트케어/블랙헤드케어" type="checkbox" id="man_s_11">
+                                        <label for="man_s_11"></label>
+                                        <p>화이트/블랙헤드케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부탄력" type="checkbox" id="man_s_12">
+                                        <label for="man_s_12"></label>
+                                        <p>피부탄력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="편리한 사용성" type="checkbox" id="man_s_13">
+                                        <label for="man_s_13"></label>
+                                        <p>편리한 사용성</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="백탁현상방지" type="checkbox" id="man_s_14">
+                                        <label for="man_s_14"></label>
+                                        <p>자연스러움(백탁현상방지)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="풍부한거품" type="checkbox" id="man_s_15">
+                                        <label for="man_s_15"></label>
+                                        <p>풍부한 거품</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="세정력" type="checkbox" id="man_s_16">
+                                        <label for="man_s_16"></label>
+                                        <p>세정력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="냄새케어" type="checkbox" id="man_s_17">
+                                        <label for="man_s_17"></label>
+                                        <p>냄새케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="노폐물제거" type="checkbox" id="man_s_18">
+                                        <label for="man_s_18"></label>
+                                        <p>노페물제거</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부진정" type="checkbox" id="man_s_19">
+                                        <label for="man_s_19"></label>
+                                        <p>가려움 진정</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="상쾌함" type="checkbox" id="man_s_20">
+                                        <label for="man_s_20"></label>
+                                        <p>상쾌함</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="향" type="checkbox" id="man_s_21">
+                                        <label for="man_s_21"></label>
+                                        <p>향</p>
+                                    </div>
+                                </div>
+                                <div class="common category_face">
+                                    <div class="check_set">
+                                        <input value="지속력" type="checkbox" id="face_s_01">
+                                        <label for="face_s_01"></label>
+                                        <p>지속력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="밀착력" type="checkbox" id="face_s_02">
+                                        <label for="face_s_02"></label>
+                                        <p>밀착력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="커버력" type="checkbox" id="face_s_03">
+                                        <label for="face_s_03"></label>
+                                        <p>커버력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="face_s_04">
+                                        <label for="face_s_04"></label>
+                                        <p>부드러운발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉함(수분공급)" type="checkbox" id="face_s_05">
+                                        <label for="face_s_05"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="face_s_06">
+                                        <label for="face_s_06"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부톤보정" type="checkbox" id="face_s_07">
+                                        <label for="face_s_07"></label>
+                                        <p>피부톤보정</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="피부결정돈" type="checkbox" id="face_s_08">
+                                        <label for="face_s_08"></label>
+                                        <p>피부결정돈</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="모공케어" type="checkbox" id="face_s_09">
+                                        <label for="face_s_09"></label>
+                                        <p>모공케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="자연스러움" type="checkbox" id="face_s_10">
+                                        <label for="face_s_10"></label>
+                                        <p>자연스러움</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="매트함" type="checkbox" id="face_s_11">
+                                        <label for="face_s_11"></label>
+                                        <p>매트함</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="다크닝없음" type="checkbox" id="face_s_12">
+                                        <label for="face_s_12"></label>
+                                        <p>다크닝없음</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="윤기부여" type="checkbox" id="face_s_13">
+                                        <label for="face_s_13"></label>
+                                        <p>윤기부여</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="자외선차단" type="checkbox" id="face_s_14">
+                                        <label for="face_s_14"></label>
+                                        <p>자외선차단</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="워터프루프" type="checkbox" id="face_s_15">
+                                        <label for="face_s_15"></label>
+                                        <p>워터프루프</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="트러블케어" type="checkbox" id="face_s_16">
+                                        <label for="face_s_16"></label>
+                                        <p>트러블케어</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="유분제거" type="checkbox" id="face_s_17">
+                                        <label for="face_s_17"></label>
+                                        <p>유분제거</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="쿨링감" type="checkbox" id="face_s_18">
+                                        <label for="face_s_18"></label>
+                                        <p>쿨링감</p>
+                                    </div>
+                                </div>
+                                <div class="common category_eyes">
+                                    <div class="check_set">
+                                        <input value="지속력" type="checkbox" id="eyes_s_01">
+                                        <label for="eyes_s_01"></label>
+                                        <p>지속력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="고발색" type="checkbox" id="eyes_s_02">
+                                        <label for="eyes_s_02"></label>
+                                        <p>고발색</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="밀착력" type="checkbox" id="eyes_s_03">
+                                        <label for="eyes_s_03"></label>
+                                        <p>밀착력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="eyes_s_04">
+                                        <label for="eyes_s_04"></label>
+                                        <p>부드러운발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="윤기부여" type="checkbox" id="eyes_s_05">
+                                        <label for="eyes_s_05"></label>
+                                        <p>윤기부여</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="저자극" type="checkbox" id="eyes_s_06">
+                                        <label for="eyes_s_06"></label>
+                                        <p>저자극</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="워터프루프" type="checkbox" id="eyes_s_07">
+                                        <label for="eyes_s_07"></label>
+                                        <p>워터프루프</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="탄력공급" type="checkbox" id="eyes_s_08">
+                                        <label for="eyes_s_08"></label>
+                                        <p>탄력공급</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="자연스러움" type="checkbox" id="eyes_s_09">
+                                        <label for="eyes_s_09"></label>
+                                        <p>자연스러움(내추럴)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="쿨톤/웜톤" type="checkbox" id="eyes_s_10">
+                                        <label for="eyes_s_10"></label>
+                                        <p>쿨톤용/웜톤용</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="펄" type="checkbox" id="eyes_s_11">
+                                        <label for="eyes_s_11"></label>
+                                        <p>펄</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="고운입자" type="checkbox" id="eyes_s_12">
+                                        <label for="eyes_s_12"></label>
+                                        <p>고운입자</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="매트/쉬머/글리터" type="checkbox" id="eyes_s_13">
+                                        <label for="eyes_s_13"></label>
+                                        <p>매트/쉬머/글리터</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="눈매연출" type="checkbox" id="eyes_s_14">
+                                        <label for="eyes_s_14"></label>
+                                        <p>눈매연출</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="컬링효과" type="checkbox" id="eyes_s_15">
+                                        <label for="eyes_s_15"></label>
+                                        <p>컬링효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="볼륨효과" type="checkbox" id="eyes_s_16">
+                                        <label for="eyes_s_16"></label>
+                                        <p>볼륨효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="롱래쉬효과" type="checkbox" id="eyes_s_17">
+                                        <label for="eyes_s_17"></label>
+                                        <p>롱래쉬효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="속눈썹영양" type="checkbox" id="eyes_s_18">
+                                        <label for="eyes_s_18"></label>
+                                        <p>속눈썹영양</p>
+                                    </div>
+                                </div>
+                                <div class="common category_lips">
+                                    <div class="check_set">
+                                        <input value="지속력" type="checkbox" id="lips_s_01">
+                                        <label for="lips_s_01"></label>
+                                        <p>지속력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="고발색" type="checkbox" id="lips_s_02">
+                                        <label for="lips_s_02"></label>
+                                        <p>고발색</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="밀착력" type="checkbox" id="lips_s_03">
+                                        <label for="lips_s_03"></label>
+                                        <p>밀착력</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="부드러운 발림" type="checkbox" id="lips_s_04">
+                                        <label for="lips_s_04"></label>
+                                        <p>부드러운발림</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="촉촉함/촉촉함(수분공급)" type="checkbox" id="lips_s_05">
+                                        <label for="lips_s_05"></label>
+                                        <p>촉촉함(수분공급)</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="매트함" type="checkbox" id="lips_s_06">
+                                        <label for="lips_s_06"></label>
+                                        <p>매트함</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="워터프루프" type="checkbox" id="lips_s_07">
+                                        <label for="lips_s_07"></label>
+                                        <p>워터프루프</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="입술보호" type="checkbox" id="lips_s_08">
+                                        <label for="lips_s_08"></label>
+                                        <p>입술보호</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="입술진정" type="checkbox" id="lips_s_09">
+                                        <label for="lips_s_09"></label>
+                                        <p>입술진정</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="틴티드효과" type="checkbox" id="lips_s_10">
+                                        <label for="lips_s_10"></label>
+                                        <p>틴티드효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="쿨톤/웜톤" type="checkbox" id="lips_s_11">
+                                        <label for="lips_s_11"></label>
+                                        <p>쿨톤용/웜톤용</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="매트/쉬머/글리터" type="checkbox" id="lips_s_12">
+                                        <label for="lips_s_12"></label>
+                                        <p>매트/쉬머/글리터</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="컬링" type="checkbox" id="lips_s_13">
+                                        <label for="lips_s_13"></label>
+                                        <p>컬링효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="볼륨감" type="checkbox" id="lips_s_14">
+                                        <label for="lips_s_14"></label>
+                                        <p>볼륨효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="롱래쉬효과" type="checkbox" id="lips_s_15">
+                                        <label for="lips_s_15"></label>
+                                        <p>롱래쉬효과</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="향" type="checkbox" id="lips_s_16">
+                                        <label for="lips_s_16"></label>
+                                        <p>향</p>
+                                    </div>
+                                    <div class="check_set">
+                                        <input value="리미티드에디션" type="checkbox" id="lips_s_17">
+                                        <label for="lips_s_17"></label>
+                                        <p>리미티드 에디션</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="k_area m-t-16 wrap">
+                    <div class="tt_row f_b_c">
+                        <div class="tt_area f_a_c">
+                            <h3 class="tt">검색 조건 리스트</h3>
+                            <p class="info">*필수 검색어 조건에 <span></span> 표시</p>
+                        </div> 
+                        <button class="add_k_Btn p-b" onclick="AddKeyword()">검색어 추가</button>
+                    </div> 
+
+                    <div class="k_input f_b_c">
+                        <div class="input_wrap f_a_c">
+                            <div class="essential_che">
+                                <input type="checkbox" id="e_check_fix">
+                                <label for="e_check_fix"></label>
+                            </div>
+                            <select id="seach_condition">
+                                <option value="All">검색조건선택</option>
+                                <option value="F">기능</option>
+                                <option value="V">고객사</option>
+                                <option value="M">제조사</option>
+                            </select>
+                            <input name="keyword" type="text" placeholder="검색어 입력">
+                        </div>                         
+                    </div>
+                </div>
+                <button class="inquiry m-t-16" onclick="fetchMarketInfo()"><span></span>조회하기</button>
+            </div> <!-- 조회하기 -->
+
+            <div class="search_results">
+                <div class="m-t-20">
+                    <h2 class="tt">화장품 전체시장</h2>
+                    <div class="title_info f_b_c m-t-12">
+                        <div class="f_b_c">
+                            <p class="tt_common black m-r-12">상품 등록 현황​</p>
+                            <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                        </div>
+                        <div class="f_a_c">
+                            <select id="graph_1" class="w-160 m-r-12" onchange="changeGraphSelect(1)">
+                                <option value="비중그래프">비중 그래프</option>
+                                <option value="성장세그래프">성장세 그래프</option>
+                                <option value="누적그래프">누적 그래프</option>
+                            </select>
+                            <button class="down p-b" onclick="exportData('MainProductStatus')">조회결과 다운로드</button>
+                        </div>
+                    </div>
+                    <div class="cover chart_wrap graph_1 m-t-12">
+                        <canvas id="p_registration"></canvas>
+                    </div>
+                    <div class="table-scroll">
+                        <div class="table-wrap">
+                            <table class="main-table reg_status">
+                                <thead>                                   
+                                </thead>
+                                <tbody>
+                                    <tr>                                     
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="main-table clone reg_status">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- //상품 등록 현황​ -->
+
+                    <div class="title_info f_b_c m-t-20">
+                        <div class="f_b_c">
+                            <p class="tt_common black m-r-12">상위 TOP 5 제조사별 등록 현황</p>
+                            <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                        </div>
+                        <div class="f_a_c">
+                            <select id="graph_2" class="w-160 m-r-12" onchange="changeGraphSelect(2)">
+                                <option value="비중그래프">비중 그래프</option>
+                                <option value="성장세그래프">성장세 그래프</option>
+                                <option value="누적그래프">누적 그래프</option>
+                            </select>
+                            <button class="down p-b" onclick="exportData('top5mfg')">조회결과 다운로드</button>
+                        </div>
+                    </div>
+                    <div class="cover chart_wrap graph_2 m-t-12">
+                        <canvas id="manufacturing"></canvas>
+                    </div>
+                    <div class="table-scroll">
+                        <div class="table-wrap">
+                            <table class="main-table top_5_m">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <table class="main-table clone top_5_m">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- //제조사별​ -->
+
+                    <div class="title_info f_b_c m-t-20">
+                        <div class="f_b_c">
+                            <p class="tt_common black m-r-12">상위 TOP 5 고객사별 등록 현황</p>
+                            <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                        </div>
+                        <div class="f_a_c">
+                            <select id="graph_3" class="w-160 m-r-12" onchange="changeGraphSelect(3)">
+                                <option value="비중그래프">비중 그래프</option>
+                                <option value="성장세그래프">성장세 그래프</option>
+                                <option value="누적그래프">누적 그래프</option>
+                            </select>
+                            <button class="down p-b" onclick="exportData('top5vendor')">조회결과 다운로드</button>
+                        </div>
+                    </div>
+                    <div class="cover chart_wrap graph_3 m-t-12">
+                        <canvas id="client"></canvas>
+                    </div>
+                    <div class="table-scroll">
+                        <div class="table-wrap">
+                            <table class="main-table top_5_client">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <table class="main-table clone top_5_client">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- //고객사별​ -->
+                </div>
+                <div class="m-t-20">
+                    <h2 class="tt">중분류 전체시장</h2>
+                    <div class="title_info f_b_c m-t-12">
+                        <div class="f_b_c">
+                            <p class="tt_common black m-r-12">상품 등록 현황​</p>
+                            <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                        </div>
+                        <div class="f_a_c">
+                            <select id="graph_4" class="w-160 m-r-12" onchange="changeGraphSelect(4)">
+                                <option value="비중그래프">비중 그래프</option>
+                                <option value="성장세그래프">성장세 그래프</option>
+                                <option value="누적그래프">누적 그래프</option>
+                            </select>
+                            <button class="down p-b" onclick="exportData('regProductCategory')">조회결과 다운로드</button>
+                        </div>
+                    </div>
+                    <div class="cover chart_wrap graph_4 m-t-12">
+                        <canvas id="market_middle_category"></canvas>
+                    </div>
+                    <div class="table-scroll">
+                        <div class="table-wrap">
+                            <table class="main-table m_cate_status">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <table class="main-table clone m_cate_status">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- //중분류 전체시장​ -->
+
+                <div class="m-t-20" id="sub_cagetory_chart" style="display: none;">
+                    <h2 class="tt">세부분류 시장</h2>
+                    <div class="title_info f_b_c m-t-12">
+                        <div class="f_b_c">
+                            <p class="tt_common black m-r-12">상품 등록 현황​</p>
+                            <p class="date_range info">2022.01.23 ~ 2022.02.23</p>
+                        </div>
+                        <div class="f_a_c">
+                            <select id="graph_5" class="w-160 m-r-12" onchange="changeGraphSelect(5)">
+                                <option value="비중그래프">비중 그래프</option>
+                                <option value="성장세그래프">성장세 그래프</option>
+                                <option value="누적그래프">누적 그래프</option>
+                            </select>
+                            <button class="down p-b" onclick="exportData('regProductSubCategory')">조회결과 다운로드</button>
+                        </div>
+                    </div>
+                    <div class="cover chart_wrap graph_5 m-t-12">
+                        <canvas id="detailed_category"></canvas>
+                    </div>
+                    <div class="table-scroll">
+                        <div class="table-wrap">
+                            <table class="main-table sub_category">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <table class="main-table clone sub_category">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- //세부분류 시장 -->
+            </div>
+        </div> 
+
+    </div>
+</main>
+
+<script src="{% static 'js/market.js' %}"></script>
+
 {% endblock %}

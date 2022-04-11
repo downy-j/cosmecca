@@ -1,9 +1,9 @@
-@import url(reset.css);
-@import url(common.css);
+@import url('/main_page/static/css/reset.css');
+@import url('/main_page/static/css/common.css');
 
 /* ------- 로그인 ------- */
 .login_bg {
-  background: url("../img/login_bg.svg") no-repeat center center, #fff;
+  background: url("/main_page/static/image/login_bg.svg") no-repeat center center, #fff;
   height: 100vh;
 }
 .loginBox {
@@ -73,7 +73,7 @@ nav {
   position: relative;
 }
 nav h1 a {
-  background: url("../img/logo.svg") no-repeat;
+  background: url('/main_page/static/image/logo.svg') no-repeat;
   width: 157px;
   height: 32px;
   display: inline-block;
@@ -85,7 +85,7 @@ nav ul {
   padding: 3px;
 }
 nav ul li a {
-  background: url("../img/nav-icon01.svg") no-repeat 30% 50%;
+  background: url("/main_page/static/image/nav-icon01.svg") no-repeat 30% 50%;
   padding: 6px 55px 6px 75px;
   display: inline-block;
   width: 100%;
@@ -93,21 +93,21 @@ nav ul li a {
   border-radius: 4px;
 }
 nav ul li.trend a {
-  background: url("../img/nav-icon02.svg") no-repeat 30% 50%;
+  background: url("/main_page/static/image/nav-icon02.svg") no-repeat 30% 50%;
 }
 nav ul li.market a {
-  background: url("../img/nav-icon03.svg") no-repeat 30% 50%;
+  background: url("/main_page/static/image/nav-icon03.svg") no-repeat 30% 50%;
 }
 nav ul li.on a {
-  background: url("../img/nav-icon01_b.svg") no-repeat 30% 50%, #ffffff;
+  background: url("/main_page/static/image/nav-icon01_b.svg") no-repeat 30% 50%, #ffffff;
   color: #25287f;
   font-weight: 500;
 }
 nav ul li.trend.on a {
-  background: url("../img/nav-icon02_b.svg") no-repeat 30% 50%, #ffffff;
+  background: url("/main_page/static/image/nav-icon02_b.svg") no-repeat 30% 50%, #ffffff;
 }
 nav ul li.market.on a {
-  background: url("../img/nav-icon03_b.svg") no-repeat 30% 50%, #ffffff;
+  background: url("/main_page/static/image/nav-icon03_b.svg") no-repeat 30% 50%, #ffffff;
 }
 .user_info {
   cursor: pointer;
@@ -181,7 +181,7 @@ h2.tt {
 }
 h2.tt span {
   display: inline-block;
-  background: url("../img/tt-icon01.svg") no-repeat;
+  background: url("/main_page/static/image/tt-icon01.svg") no-repeat;
   width: 22px;
   height: 22px;
   margin-right: 9px;
@@ -189,10 +189,10 @@ h2.tt span {
   vertical-align: middle;
 }
 button.m-managementBtn {
-  background: url(../img/m-management-icon.svg) no-repeat 11% center, #f9f9f9;
+  background: url('/main_page/static/image/m-management-icon.svg') no-repeat 11% center, #f9f9f9;
 }
 button.stopwordBtn {
-  background: url(../img/stopword-icon.svg) no-repeat 11% center, #f9f9f9;
+  background: url('/main_page/static/image/stopword-icon.svg') no-repeat 11% center, #f9f9f9;
 }
 .f_area .group {
   width: 408px;
@@ -229,7 +229,7 @@ p.tt {
 }
 .period ul li.dateP {
   width: 200px;
-  background: url(../img/calendar.svg) no-repeat 5.5% center, #ffffff;
+  background: url('/main_page/static/image/calendar.svg') no-repeat 5.5% center, #ffffff;
   padding: 9px 24px 9px 33px;
   overflow: hidden;
 }
@@ -243,7 +243,7 @@ p.tt {
   border-right: none;
 }
 .period ul li.dateP.active {
-  background: url(../img/calendar_b.svg) no-repeat 5.5% center, #f4f6ff;
+  background: url('/main_page/static/image/calendar_b.svg') no-repeat 5.5% center, #f4f6ff;
 }
 .period ul li.dateP.active input {
   background: #f4f6ff;
@@ -368,7 +368,7 @@ h3.tt {
   margin-left: 12px;
 }
 .k_area .tt_row .tt_area p span {
-  background: url("../img/check-icon.svg") no-repeat;
+  background: url("/main_page/static/image/check-icon.svg") no-repeat;
   display: inline-block;
   width: 17px;
   height: 17px;
@@ -384,7 +384,7 @@ h3.tt {
   margin-left: 5px;
 }
 button.add_k_Btn {
-  background: url(../img/add-icon.svg) no-repeat 11% center, #f9f9f9;
+  background: url('/main_page/static/image/add-icon.svg') no-repeat 11% center, #f9f9f9;
 }
 .k_input .input_wrap {
   width: 609px;
@@ -402,7 +402,7 @@ button.add_k_Btn {
   position: relative;
 }
 .add_close span {
-  background: url("../img/close02.svg") no-repeat center center, #f9f9f9;
+  background: url("/main_page/static/image/close02.svg") no-repeat center center, #f9f9f9;
   position: absolute;
   top: 0;
   right: 0;
@@ -420,7 +420,7 @@ button.inquiry {
   padding: 7px 0;
 }
 button.inquiry span {
-  background: url("../img/search_b.svg") no-repeat;
+  background: url("/main_page/static/image/search_b.svg") no-repeat;
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -432,10 +432,10 @@ button.inquiry:hover {
   color: #ffffff;
 }
 button.inquiry:hover span {
-  background: url("../img/search_w.svg") no-repeat;
+  background: url("/main_page/static/image/search_w.svg") no-repeat;
 }
 button.down {
-  background: url(../img/download-icon.svg) no-repeat 8.5% center, #f9f9f9;
+  background: url('/main_page/static/image/download-icon.svg') no-repeat 8.5% center, #f9f9f9;
   height: 38px;
 }
 .comparison {
@@ -447,7 +447,7 @@ button.down {
   color: #a7a7a7;
 }
 .comparison button span {
-  background: url("../img/button_bg_com.svg") no-repeat;
+  background: url("/main_page/static/image/button_bg_com.svg") no-repeat;
   width: 18px;
   height: 18px;
   display: inline-block;
@@ -467,7 +467,7 @@ button.down {
   margin-right: 10px;
 }
 .comparison .items p span.close01 {
-  background: url("../img/close01.svg") no-repeat;
+  background: url("/main_page/static/image/close01.svg") no-repeat;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -707,7 +707,7 @@ table td button {
   vertical-align: middle;
 }
 .m_m .modal_style h3.tt span {
-  background: url("../img/m-management-icon_b.svg") no-repeat;
+  background: url("/main_page/static/image/m-management-icon_b.svg") no-repeat;
 }
 .m_m .modal_style h3 + div {
   margin-top: 20px;
@@ -775,7 +775,7 @@ table td button {
   color: #25287f;
 }
 .add_stopword button.add span {
-  background: url("../img/add-icon_b.svg");
+  background: url("/main_page/static/image/add-icon_b.svg");
   display: inline-block;
   width: 18px;
   height: 18px;
@@ -783,7 +783,7 @@ table td button {
   margin-right: 5px;
 }
 .stopword .modal_style h3.tt span {
-  background: url("../img/stopword-icon_b.svg") no-repeat;
+  background: url("/main_page/static/image/stopword-icon_b.svg") no-repeat;
 }
 .search_input {
   background: #ffffff;
@@ -1094,7 +1094,7 @@ td.ranking span:last-child {
   margin-right: 0;
 }
 button.listBtn {
-  background: url(../img/list-icon.svg) no-repeat 8.5% center, #f9f9f9;
+  background: url('/main_page/static/image/list-icon.svg') no-repeat 8.5% center, #f9f9f9;
   height: 38px;
 }
 .product_info .img_wrap {
@@ -1365,41 +1365,41 @@ ul.com_chart li:last-child {
   width: 22px;
   height: 22px;
   display: inline-block;
-  background: url("../img/num_b.svg") no-repeat 0px 0px;
+  background: url("/main_page/static/image/num_b.svg") no-repeat 0px 0px;
   margin-bottom: 3px;
   margin-right: 22px;
   vertical-align: middle;
 }
 .top_key .keyword:nth-of-type(2) p span {
-  background: url("../img/num_b.svg") no-repeat -23px 0px;
+  background: url("/main_page/static/image/num_b.svg") no-repeat -23px 0px;
 }
 .top_key .keyword:nth-of-type(3) p span {
-  background: url("../img/num_b.svg") no-repeat -46px 0px;
+  background: url("/main_page/static/image/num_b.svg") no-repeat -46px 0px;
 }
 .top_key .keyword:nth-of-type(4) p span {
-  background: url("../img/num_b.svg") no-repeat -69px 0px;
+  background: url("/main_page/static/image/num_b.svg") no-repeat -69px 0px;
 }
 .top_key .keyword:nth-of-type(5) p span {
-  background: url("../img/num_b.svg") no-repeat -92px 0px;
+  background: url("/main_page/static/image/num_b.svg") no-repeat -92px 0px;
 }
 .top_key .keyword p.percentage {
   font-weight: 500;
   color: #25287f;
 }
 .top_key.green .keyword p span {
-  background: url("../img/num_g.svg") no-repeat 0px 0px;
+  background: url("/main_page/static/image/num_g.svg") no-repeat 0px 0px;
 }
 .top_key.green .keyword:nth-of-type(2) p span {
-  background: url("../img/num_g.svg") no-repeat -23px 0px;
+  background: url("/main_page/static/image/num_g.svg") no-repeat -23px 0px;
 }
 .top_key.green .keyword:nth-of-type(3) p span {
-  background: url("../img/num_g.svg") no-repeat -46px 0px;
+  background: url("/main_page/static/image/num_g.svg") no-repeat -46px 0px;
 }
 .top_key.green .keyword:nth-of-type(4) p span {
-  background: url("../img/num_g.svg") no-repeat -69px 0px;
+  background: url("/main_page/static/image/num_g.svg") no-repeat -69px 0px;
 }
 .top_key.green .keyword:nth-of-type(5) p span {
-  background: url("../img/num_g.svg") no-repeat -92px 0px;
+  background: url("/main_page/static/image/num_g.svg") no-repeat -92px 0px;
 }
 .top_key.green .keyword p.percentage {
   color: #65ae55;
@@ -1429,7 +1429,7 @@ ul.com_chart li:last-child {
 
 /* ------- 트렌드 분석 ------- */
 main.trend h2.tt span {
-  background: url(../img/tt-icon02.svg) no-repeat;
+  background: url('/main_page/static/image/tt-icon02.svg') no-repeat;
 }
 main.trend ul.tabs {
   margin-top: 18px;
@@ -1512,7 +1512,7 @@ main.trend .filter_area {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: url("../img/info.svg") no-repeat;
+  background: url("/main_page/static/image/info.svg") no-repeat;
   vertical-align: middle;
 }
 .group p.month {
@@ -1617,11 +1617,11 @@ h2.tt strong {
   cursor: pointer;
 }
 .view_date span.prev_month {
-  background: url("../img/mon_prev.svg") no-repeat;
+  background: url("/main_page/static/image/mon_prev.svg") no-repeat;
   margin-right: 19px;
 }
 .view_date span.next_month {
-  background: url("../img/mon_next.svg") no-repeat;
+  background: url("/main_page/static/image/mon_next.svg") no-repeat;
   margin-left: 19px;
 }
 .search_word ul {
@@ -1705,7 +1705,7 @@ h2.tt strong {
 
 /* 연관검색어 모달 */
 .related_s_w .modal_style h3.tt span {
-  background: url(../img/search_b.svg) no-repeat;
+  background: url('/main_page/static/image/search_b.svg') no-repeat;
   width: 24px;
   height: 24px;
   margin-bottom: 0;
@@ -1739,7 +1739,7 @@ h2.tt strong {
   right: 0px;
 }
 button.relatedBtn {
-  background: url(../img/search_g.svg) no-repeat 11% center, #f9f9f9;
+  background: url('/main_page/static/image/search_g.svg') no-repeat 11% center, #f9f9f9;
 }
 .related_s_w .search_input input[type="text"] {
   width: 335px;
@@ -1854,7 +1854,7 @@ table.blog_table td button {
 
 /* ------- 시장 현황 ------- */
 main.market h2.tt span {
-  background: url(../img/tt-icon03.svg) no-repeat;
+  background: url('/main_page/static/image/tt-icon03.svg') no-repeat;
 }
 main.market .filter_area {
   background: #f8f8f8;
@@ -2010,7 +2010,7 @@ main.market .card p.tt {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  background: url(../img/select-bg.svg) no-repeat 94% 50%, #ffffff;
+  background: url('/main_page/static/image/select-bg.svg') no-repeat 94% 50%, #ffffff;
   border: 1px solid #e7e7e7;
   box-sizing: border-box;
   border-radius: 4px;

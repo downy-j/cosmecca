@@ -5,11 +5,11 @@ $(function () {
     let infoMenu = $('.submenu');
 
     userMenu.click(function () {
-        $(this).children('.arrow img').attr("src", "img/chevron_down.svg");
+        $(this).children('.arrow img').attr("src", "/main_page/static/image/chevron_down.svg");
         infoMenu.toggleClass("active");
 
         if(infoMenu.hasClass("active")){
-            $(this).children('.arrow img').attr("src", "img/chevron_up.svg");
+            $(this).children('.arrow img').attr("src", "/main_page/static/image/chevron_up.svg");
         }
     });
 
