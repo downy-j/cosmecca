@@ -1,0 +1,349 @@
+{% extends 'main_page/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<script src="{% static '/js/nav_header.js' %}"></script>
+<script src="{% static '/js/network/api.js' %}"></script>
+<script src="{% static '/js/network/on-ajax.js' %}"></script>
+<script src="{% static '/js/utils/utils.js' %}"></script>
+<script src="{% static '/js/plugins/pager.js' %}"></script>
+<script src="{% static '/js/plugins/dateFormat.js' %}"></script>
+<script src="{% static '/js/plugins/storage.js' %}"></script>
+<script src="{% static '/js/plugins/chart.js' %}"></script>
+<script src="{% static '/js/plugins/csv.js' %}"></script>
+<script src="{% static '/js/constants/meta-info.js' %}"></script>
+
+<main class="site-content">
+    <div class="container">
+        <div class="wrap p-16 shadow">
+            <div class="contents_top f_b_c">
+                <h2 class="tt">제품 정보</h2>
+                <div class="f_a_c">
+                    <button class="down p-b" onclick="exportData('review')">조회결과 다운로드</button>
+                    <button class="listBtn m-l-16 p-b" onclick="history.back()">목록으로 이동</button>
+                </div>
+            </div>
+            <div class="product_info flex m-b-20">
+                <div class="img_wrap">
+                        <img 
+                        src="img/sample_img.jpeg" alt="상품 이미지"
+                        onerror="this.src='img/no-img.svg'"/>
+                </div>
+                <div class="desc">
+                    <div class="category_info_wrap flex">
+                        <div class="category_info f_a_c">
+                            <span>품번:</span>
+                            <p></p>
+                        </div>
+                        <div class="category_info f_a_c">
+                            <span>1차 분류:</span>
+                            <p></p>
+                        </div>
+                        <div class="category_info f_a_c">
+                            <span>2차 분류:</span>
+                            <p></p>
+                        </div>
+                    </div>
+                    <h3 id="prod_nm" class="m-t-b-12"></h3>
+                    <p id="description"></p>
+                    <div class="info column m-t-12">
+                        <p class="tt">제품성분</p>
+                        <div class="ingredient">
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- //상품 상세 -->
+
+            <div class="card_wrap f_b_c m-b-16" style="display: none;">
+                <div class="chart_card wrap">
+                    <div class="tt_area">
+                        <p class="tt">연령 분포도</p>
+                    </div>
+                    <div class="f_a_c contents">
+                        <div class="chart_wrap">
+                            <canvas id="age_pie"></canvas>
+                        </div>
+                        <div class="legend age">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart_card wrap">
+                    <div class="tt_area">
+                        <p class="tt">성별 분포도</p>
+                    </div>
+                    <div class="f_a_c contents">
+                        <div class="chart_wrap">
+                            <canvas id="gender_pie"></canvas>
+                        </div>
+                        <div class="legend gender">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart_card wrap">
+                        <div class="tt_area">
+                            <p class="tt">피부 타입 분포도</p>
+                        </div>
+                        <div class="f_a_c contents">
+                            <div class="chart_wrap">
+                                <canvas id="skin_pie"></canvas>
+                            </div>
+                            <div class="legend skin">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div> <!-- //글로우픽 -->
+
+            <div class="chart_area01 f_b_c">
+                <div class="chart_card">
+                    <p class="tt">속성분포도</p>
+                    <div class="product_chart flex">
+                        <div class="chart_wrap">
+                            <div class="chart">
+                                <canvas id="feeling_pie"></canvas>
+                            </div>
+                        </div>
+                        <div class="legend_wrap">
+                            <div class="legend attr">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart_card">
+                    <p class="tt">평점분포도</p>
+                    <div class="product_chart flex">
+                        <div class="chart_wrap">
+                            <div class="chart">
+                                <canvas id="score_pie"></canvas>
+                            </div>
+                        </div>
+                        <div class="legend_wrap">
+                            <div class="legend grade">
+                                <ul>
+                                    <li><span class="bgColor01"></span>1점</li>
+                                    <li><span class="bgColor02"></span>2점</li>
+                                    <li><span class="bgColor03"></span>3점</li>
+                                    <li><span class="bgColor04"></span>4점</li>
+                                    <li><span class="bgColor05"></span>5점</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrap p-16 shadow m-t-20">
+            <div class="set">
+                <div class="f_a_c">
+                    <h4 class="tt_b m-r-12">주제별 긍부정 그래프</h4>
+                                </div>
+                <div class="chart_area02 p-g wrap m-t-12">
+                    <canvas id="Po_Negative_bar"></canvas>
+                </div>
+            </div>
+            <div class="set m-t-20">
+                <div class="f_a_c">
+                    <h4 class="tt_b m-r-12">키워드 상위 5</h4>
+                    <p class="info">*각각의 상위 키워드 차트를 클릭해 불용어 추가가 가능합니다.</p>
+                </div>
+                <div class="chart_area03 p-g wrap m-t-12">
+                    <canvas id="keyword_bar"></canvas>
+                </div>
+            </div>
+
+        </div> <!-- //주제별 긍부정 그래프 -->
+
+        <div class="wrap p-16 shadow m-t-20">
+            <div class="key_all">
+                <h4 class="tt_b">전체 핵심문장</h4>
+                <div class="table_wrapper list01 m-t-12">
+                    <table class="key_sentence">
+                        <thead>
+                            <tr>
+                                <th>NO</th><th>전체 핵심문장</th>
+                            </tr>
+                        </thead>
+                        <tbody id="key_sentence_tbody">
+                            <tr>
+                                <td>01</td>
+                                <td class="value" title="-">-</td>
+                            </tr>
+                            <tr>
+                                <td>02</td>
+                                <td class="value" title="-">-</td>
+                            </tr>
+                            <tr>
+                                <td>03</td>
+                                <td class="value" title="-">-</td>
+                            </tr>
+                            <tr>
+                                <td>04</td>
+                                <td class="value" title="-">-</td>
+                            </tr>
+                            <tr>
+                                <td>05</td>
+                                <td class="value" title="-">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="f_b_c m-t-20">
+                <div class="key_positive review_common">
+                    <h4 class="tt_b">긍정 리뷰</h4>
+                    <div class="table_wrapper list01 m-t-12">
+                        <table class="key_sentence">
+                            <thead>
+                                <tr>
+                                    <th>NO</th><th>긍정 리뷰</th>
+                                </tr>
+                            </thead>
+                            <tbody id="positive_review">
+                                <tr>
+                                    <td>01</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>02</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>03</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>04</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>05</td>
+                                    <td title="-">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="key_negative review_common">
+                    <h4 class="tt_b">부정 리뷰</h4>
+                    <div class="table_wrapper list01 m-t-12">
+                        <table class="key_sentence">
+                            <thead>
+                                <tr>
+                                    <th>NO</th><th>부정 리뷰</th>
+                                </tr>
+                            </thead>
+                            <tbody id="negative_review">
+                                <tr>
+                                    <td>01</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>02</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>03</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>04</td>
+                                    <td title="-">-</td>
+                                </tr>
+                                <tr>
+                                    <td>05</td>
+                                    <td title="-">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal_bg stopword etc">
+            <div class="modal_style">
+                <h3 class="tt"><span></span>불용어 관리</h3>
+                <div class="stopword_modal">
+                    <div class="add_stopword wrap p-16">
+                        <h4 class="tt">+ 불용어 추가</h4>
+                        <div class="group flex m-t-12">
+                            <p>불용어</p>
+                            <input name="stopword" type="text" placeholder="불용어 입력">
+                        </div>
+                        <div class="group flex m-t-12">
+                            <p>설명</p>
+                            <input name="stopword_comment" type="text" placeholder="불용어에 대한 설명 및 참고사항 입력">
+                        </div>
+                        <button class="m-t-12 add" onclick="addStopword()"><span></span>추가하기</button>
+                    </div>
+                    <div class="f_b_c">
+                        <select id="stopword" class="w-160"  onchange="changeStopwordSelect()">
+                            <option value="10">10개씩 보기</option>
+                            <option value="20">20개씩 보기</option>
+                            <option value="30">30개씩 보기</option>
+                        </select>
+                        <div class="search_input">
+                            <form method="GET">
+                                <input type="text" name="keyword_stopword" placeholder="불용어 조회조건 입력">
+                                <input type="submit" value="검색" onclick="fetchStopwordWithKeyword()">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="list01 h_fix m-t-12">
+                        <table class="stopword_table">
+                            <thead>
+                                <tr>
+                                    <th>불용어</th>
+                                    <th>설명</th>
+                                    <th>등록자</th>
+                                    <th>등록일시</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stopword_tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="center p-10 pager m-t-16">
+                        <div class="pager stopword f_c_c">
+                            <span class="p_pre">prev</span>
+                            <span class="pre">prev</span>
+                            <a href="#" class="current">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <a href="#">4</a>
+                            <a href="#">5</a>
+                            <a href="#">6</a>
+                            <span class="next">next</span>
+                            <span class="n_next">next</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="m_close">close</span>
+            </div>
+
+        </div>  <!-- 불용어 관리 모달 -->
+        <div class="delete_modal">
+            <div class="contents">
+                <p><strong>‘불용어’</strong>를<br/> 삭제하시겠습니까?</p>
+                <div class="f_center">
+                    <button class="c_Btn" onclick="stopWModalCancel()">취소하기</button>
+                    <button class="d_Btn" onclick="runDeleteStopword()">삭제하기</button>
+                </div>
+            </div>
+        </div> <!-- 불용어 관리 삭제 모달 -->
+    </div>
+</main>
+
+<script src="{% static '/js/product_detail.js' %}"></script>
+
+{% endblock %}

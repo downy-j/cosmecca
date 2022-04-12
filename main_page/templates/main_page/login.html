@@ -11,15 +11,18 @@
                     <span></span>
                     <h2>영업 AI 마케팅 시스템</h2>
                 </div>
-                <div class="input_area">
-                    <input id="account_id" type="text" placeholder="아이디">
-                    <input id="password" type="password" class="m-t-18" placeholder="비밀번호" onkeyup="pressEnterKey()">
-                </div>
-                <button id="btn_login">로그인</button>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <div class="input_area">
+                        <input id="account_id" name="username" type="text" placeholder="아이디" value="{{ form.username.value | default_if_none:'' }}">
+                        <input id="password" name="password" type="password" class="m-t-18" placeholder="비밀번호" value="{{ form.password.value | default_if_none:'' }}">
+                    </div>
+                    <button type="submit" id="btn_login">로그인</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <script src="{% static 'js/login.js' %}"></script> 
+    <!-- <script src="{% static 'js/login.js' %}"></script>  -->
 </body>
 </html>

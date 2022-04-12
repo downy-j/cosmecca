@@ -1,0 +1,370 @@
+{% extends 'main_page/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<script src="{% static '/js/nav_header.js' %}"></script>
+<script src="{% static '/js/network/api.js' %}"></script>
+<script src="{% static '/js/network/on-ajax.js' %}"></script>
+<script src="{% static '/js/utils/utils.js' %}"></script>
+<script src="{% static '/js/plugins/pager.js' %}"></script>
+<script src="{% static '/js/plugins/dateFormat.js' %}"></script>
+<script src="{% static '/js/plugins/storage.js' %}"></script>
+<script src="{% static '/js/plugins/chart.js' %}"></script>
+<script src="{% static '/js/plugins/csv.js' %}"></script>
+<script src="{% static '/js/constants/meta-info.js' %}"></script>
+
+<main class="site-content project_com">
+    <div class="container">
+        <div class="wrap p-16 shadow">
+            <div class="contents_top f_b_c">
+                <h2 class="tt">리뷰 비교분석</h2>
+                <div class="f_a_c">
+                    <button class="down p-b" onclick="exportData('comparison')">조회결과 다운로드</button>
+                    <button class="listBtn m-l-16 p-b" onclick="history.back()">목록으로 이동</button>
+                </div>
+            </div>
+            <div class="product_info flex">
+                <div class="half">
+                    <h3 id="p1">알렉스 허벌 로얄 비비크림 30ml/50ml</h3>
+                    <div class="flex m-t-12">
+                        <div class="img_wrap p1">
+                                <img 
+                                src="{% static '/image/sample_img.jpeg' %}" alt="상품 이미지"
+                                onerror="this.src='/image/no-img.svg'"/>
+                        </div>
+                        <div class="desc">
+                            <div class="row">
+                                <div class="category_info p1">
+                                    <span>품번:</span>
+                                    <p>1123234455645235243525</p>
+                                </div>
+                            </div>
+                            <div class="row m-t-12">
+                                <div class="category_info p1">
+                                    <span>1차 분류:</span>
+                                    <p>메이크업(페이스)</p>
+                                </div>
+                            </div>
+                            <div class="row m-t-12">
+                                <div class="category_info p1">
+                                    <span>2차 분류:</span>
+                                    <p>BB크림(CC포함)</p>
+                                </div>
+                            </div>
+                            <div class="info column m-t-16">
+                                <p class="tt">제품성분</p>
+                                <div class="ingredient p1">
+                                    정제수, 프로판다이올, 부틸렌글라이콜, 1,2-헥산다이올, 변성알코올, 글리세린, 베타인, 티트리잎수(9,400ppm), 유칼립투스잎추출물, 녹차추출물, 미역추출물, 병풀추출물, 쇠비름추출물, 글리세레스-26, 소듐하이알루로네이트, 암모늄아크릴로일다이메틸타우레이트/브이피코폴리머, 피이지-60하이드로제네이티드캐스터오일, 티트리잎오일(95ppm), 유칼립투스잎오일, 다이소듐이디티에이, 에틸헥실글리세린
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info column m-t-16">
+                        <p class="tt">제품설명</p>
+                        <div class="description p1">
+                            지속력이 오래가고 발림이 우수함. -세부정보 특징: 촉촉함-자연스러움.
+                        </div>
+                    </div>
+                </div>
+                <div class="half m-l-18">
+                    <h3 id="p2">알렉스 허벌 로얄 비비크림 30ml/50ml</h3>
+                    <div class="flex m-t-12">
+                        <div class="img_wrap p2">
+                                <img 
+                                src="img/sample_img.jpeg" alt="상품 이미지"
+                                onerror="this.src='img/no-img.svg'"/>
+                        </div>
+                        <div class="desc">
+                            <div class="row">
+                                <div class="category_info p2">
+                                    <span>품번:</span>
+                                    <p>1123234455645235243525</p>
+                                </div>
+                            </div>
+                            <div class="row m-t-12">
+                                <div class="category_info p2">
+                                    <span>1차 분류:</span>
+                                    <p>메이크업(페이스)</p>
+                                </div>
+                            </div>
+                            <div class="row m-t-12">
+                                <div class="category_info p2">
+                                    <span>2차 분류:</span>
+                                    <p>BB크림(CC포함)</p>
+                                </div>
+                            </div>
+                            <div class="info column m-t-16">
+                                <p class="tt">제품성분</p>
+                                <div class="ingredient p2">
+                                    정제수, 프로판다이올, 부틸렌글라이콜, 1,2-헥산다이올, 변성알코올, 글리세린, 베타인,
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info column m-t-16">
+                        <p class="tt">제품설명</p>
+                        <div class="description p2">
+                            지속력이 오래가고 발림이 우수함. -세부정보 특징: 촉촉함-자연스러움.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- //상품 상세 -->
+
+        <div class="wrap glowpick p-16 shadow m-t-20" style="display: none;">
+            <div class="flex">
+                <div class="distribution_card">
+                    <p class="tt">연령 분포도</p>
+                    <div class="chart_area06 p-g">
+                        <div class="flex">
+                            <div class="chart_mirror">
+                                <canvas id="age_mirror01"></canvas>
+                            </div>
+                            <div class="chart_mirror">
+                                <canvas id="age_mirror02"></canvas>
+                            </div>
+                        </div>
+                        <span class="dotted_line"></span>
+                    </div>
+                </div>
+                <div class="distribution_card m-l-18">
+                    <p class="tt">성별 분포도</p>
+                    <div class="chart_area06 p-g">
+                        <div class="flex">
+                            <div class="chart_mirror">
+                                <canvas id="gender_mirror01"></canvas>
+                            </div>
+                            <div class="chart_mirror">
+                                <canvas id="gender_mirror02"></canvas>
+                            </div>
+                        </div>
+                        <span class="dotted_line"></span>
+                    </div>
+                </div>
+                <div class="distribution_card m-l-18">
+                    <p class="tt">피부 타입 분포도</p>
+                    <div class="chart_area06 p-g">
+                        <div class="flex">
+                            <div class="chart_mirror">
+                                <canvas id="skin_mirror01"></canvas>
+                            </div>
+                            <div class="chart_mirror">
+                                <canvas id="skin_mirror02"></canvas>
+                            </div>
+                        </div>
+                        <span class="dotted_line"></span>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- //글로우픽 분포도 -->
+
+        <div class="wrap p-16 shadow m-t-20">
+            <div class="set">
+                <h4 class="tt_b m-r-12">속성 비교분포도</h4>
+                <div class="chart_area04 p-g wrap m-t-12">
+                    <canvas id="Po_Negative_bar"></canvas>
+                </div>
+            </div>
+            <div class="set m-t-20">
+                <h4 class="tt_b m-r-12">평점 비교분포도</h4>
+                <div class="chart_area04 p-g wrap m-t-12">
+                    <canvas id="keyword_bar"></canvas>
+                </div>
+            </div>
+        </div> <!-- //속성 비교분포도 -->
+
+        <div class="wrap p-16 shadow m-t-20">
+            <div class="set">
+                <h4 class="tt_b m-r-12">주제별 긍부정 비교 그래프</h4>
+                <ul class="com_chart flex m-t-12">
+                    <li>제품1</li>
+                    <li>제품2</li>
+                </ul>
+                <div class="chart_area05 ">
+                    <div class="flex">
+                        <div class="chart_mirror">
+                            <canvas id="p_n_mirror01"></canvas>
+                        </div>
+                        <div class="chart_mirror">
+                            <canvas id="p_n_mirror02"></canvas>
+                        </div>
+                    </div>
+                    <div class="legend center">
+                        <ul>
+                            <li><span class="bgColor01"></span>긍정</li>
+                            <li><span class="grayColor"></span>중립</li>
+                            <li><span class="pink"></span>부정</li>
+                        </ul>
+                    </div>
+                    <span class="dotted_line"></span>
+                </div>
+            </div>
+            <div class="set m-t-20">
+                <h4 class="tt_b m-r-12">키워드 상위5  비교</h4>
+                <div class="flex">
+                    <div class="key_card wrap m-t-12">
+                        <p class="product_n b-b">제품1</p>
+                        <div class="top_key blue">
+                        </div>
+                    </div>
+                    <div class="key_card wrap m-t-12">
+                        <p class="product_n b-b">제품2</p>
+                        <div class="top_key green">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- //주제별 긍부정 비교 그래프 -->
+
+        <div class="wrap p-16 shadow m-t-20">
+            <h4 class="tt_b">긍정 리뷰</h4>
+            <div class="f_b_c m-t-12">
+                <div class="review_common">
+                    <p class="product_n">제품1</p>
+                    <div class="table_wrapper list01">
+                        <table class="key_sentence">
+                            <thead>
+                                <tr>
+                                    <th>NO</th><th>긍정 핵심문장</th>
+                                </tr>
+                            </thead>
+                            <tbody id="positive_review1">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="review_common">
+                    <p class="product_n">제품2</p>
+                    <div class="table_wrapper list01">
+                        <table class="key_sentence">
+                            <thead>
+                                <tr>
+                                    <th>NO</th><th>긍정 핵심문장</th>
+                                </tr>
+                            </thead>
+                            <tbody id="positive_review2">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="tt_b m-t-20">부정 리뷰</h4>
+            <div class="f_b_c m-t-12">
+                <div class="review_common">
+                    <p class="product_n">제품1</p>
+                    <div class="table_wrapper list01">
+                        <table class="key_sentence">
+                            <thead>
+                                <tr>
+                                    <th>NO</th><th>부정 핵심문장</th>
+                                </tr>
+                            </thead>
+                            <tbody id="negative_review1">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="review_common">
+                    <p class="product_n">제품2</p>
+                    <div class="table_wrapper list01">
+                        <table class="key_sentence">
+                            <thead>
+                                <tr>
+                                    <th>NO</th><th>부정 핵심문장</th>
+                                </tr>
+                            </thead>
+                            <tbody id="negative_review2">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- //리뷰 -->
+
+        <div class="modal_bg stopword etc">
+            <div class="modal_style">
+                <h3 class="tt"><span></span>불용어 관리</h3>
+                <div>
+                    <div class="add_stopword wrap p-16">
+                        <h4 class="tt">+ 불용어 추가</h4>
+                        <div class="group flex m-t-12">
+                            <p>불용어</p>
+                            <input type="text" placeholder="불용어 입력">
+                        </div>
+                        <div class="group flex m-t-12">
+                            <p>설명</p>
+                            <input type="text" placeholder="불용어에 대한 설명 및 참고사항 입력">
+                        </div>
+                        <button class="m-t-12 add"><span></span>추가하기</button>
+                    </div>
+                    <div class="f_b_c">
+                        <select class="w-160">
+                            <option value="10개씩보기">10개씩 보기</option>
+                            <option value="30개씩보기">20개씩 보기</option>
+                            <option value="50개씩보기">30개씩 보기</option>
+                        </select>
+                        <div class="search_input">
+                            <form method="GET">
+                                <input type="text" name="keyword" placeholder="불용어 조회조건 입력"><input type="submit" value="검색">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="list01 h_fix m-t-12">
+                        <table class="stopword_table">
+                            <thead>
+                                <tr>
+                                    <th>불용어</th>
+                                    <th>설명</th>
+                                    <th>등록자</th>
+                                    <th>등록일시</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td title="34234231342253">34234231342253</td>
+                                    <td class="left" title="설명">설명</td>
+                                    <td title="등록자">등록자</td>
+                                    <td title="2001.11.12/11:22:23">2001.11.12/11:22:23</td>
+                                    <td><span class="stopW_Delete" onclick="stopWDelete()">삭제</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="center p-10 pager m-t-16">
+                        <div class="f_c_c">
+                            <span class="p_pre">prev</span>
+                            <span class="pre">prev</span>
+                            <a href="#" class="current">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <a href="#">4</a>
+                            <a href="#">5</a>
+                            <a href="#">6</a>
+                            <span class="next">next</span>
+                            <span class="n_next">next</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="m_close">close</span>
+            </div>
+
+        </div>  <!-- 불용어 관리 모달 -->
+        <div class="delete_modal">
+            <div class="contents">
+                <p><strong>‘불용어’</strong>를<br/> 삭제하시겠습니까?</p>
+                <div class="f_center">
+                    <button class="c_Btn" onclick="stopWModalCancel()">취소하기</button>
+                    <button class="d_Btn">삭제하기</button>
+                </div>
+            </div>
+        </div> <!-- 불용어 관리 삭제 모달 -->
+    </div>
+</main>
+
+<script src="{% static '/js/comparison.js' %}"></script>
+
+{% endblock %}
